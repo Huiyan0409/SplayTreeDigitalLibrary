@@ -1,0 +1,12 @@
+insert into COLUMNFORM values ('RULEID','accnttransf1','as 前','as 后','schema.tablename','db','desc','')
+
+create table COLUMNFORM
+(
+RULEID varchar(60),--任务ID
+EID varchar(60),--EID
+origincolumn varchar(60),--as 前
+column varchar(60),--as 后
+tablename varchar(60),--表名
+db varchar(60),--库
+desc varchar(3000)--说明
+)

@@ -1,0 +1,92 @@
+ruleID,eID,origincolumn,nowcolumn,tablename,db,describ
+shoukuanbaototal,shoukuanbaototalold,"COALESCE(CHAR(CUSTOMERNUMBER), 'NULL') || COALESCE(CHAR(SRC), 'NULL') "," IDNOUSE",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,"'SKB' "," DATAORIGIN",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,"CUSTOMERNUMBER "," RECEIVERID",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,C,"E SRC WHEN 'W' THEN 260 WHEN 'B' THEN 222 WHEN 'D' THEN 222 WHEN 'T' THEN 222 WHEN 'S' THEN 222 END ",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,C,"E SRC WHEN 'W' THEN '3011001006001' WHEN 'B' THEN '3011001003001' WHEN 'D' THEN '3011001003001' WHEN 'T' THEN '3011001003001' WHEN 'S' THEN '3011001003001' END ",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,"DATE(CREATETIME) "," TRXDATE",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,"'3011004001004' "," SALES_PRODUCT_CODE",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,"SUM(AMOUNT) "," TRXAMOUNT",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,shoukuanbaototalold,"COUNT(*) "," TRXCOUNT",SKB.TBL_SKB_RECEIVE,accnt,NULL
+shoukuanbaototal,customeridnummap1,"CUSTOMERNUMBER "," RECEIVERID",CUSTOMERINFO,reportdb,NULL
+shoukuanbaototal,customeridnummap1,"ID "," CUSTOMERID",CUSTOMERINFO,reportdb,NULL
+shoukuanbao,shoukuanbaosuccess,"COALESCE(CHAR(REG.MAINCUSTOMERNUMBER), 'NULL') || COALESCE(CHAR(REC.SRC), 'NULL') || COALESCE(CHAR(DATE(REC.UPDATETIME)), 'NULL') || COALESCE(CHAR(REC.BANK_CHANNEL_NO), 'NULL') || COALESCE(CHAR(REC.BANKCODE), 'NULL') || COALESCE(CHAR(REC.PAYER_CARD_TYPE), 'NULL') || 'SHOUKUANBAOSUCCESS' "," IDNOUSE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"'SKB' "," DATAORIGIN","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"YEAR(REC.UPDATETIME) * 100 + MONTH(REC.UPDATETIME) "," MONTH","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"REG.MAINCUSTOMERNUMBER "," RECEIVERID","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,C,"E REC.SRC WHEN 'W' THEN 260 WHEN 'B' THEN 222 WHEN 'D' THEN 222 WHEN 'T' THEN 222 WHEN 'S' THEN 222 WHEN 'J' THEN 260 END ","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,C,"E REC.SRC WHEN 'W' THEN '3011001006001' WHEN 'B' THEN '3011001003001' WHEN 'D' THEN '3011001003001' WHEN 'T' THEN '3011001003001' WHEN 'S' THEN '3011001003001' WHEN 'J' THEN '3011001006001' ELSE '3011001003001' END ","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"DATE(REC.UPDATETIME) "," TRXDATE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"'3011004001004A' "," SALES_PRODUCT_CODE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"SUM(REC.AMOUNT) "," TRXAMOUNT","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"COUNT(*) "," TRXCOUNT","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"SUM(REC.COUNTERFEE) "," TRXSOURCEFEE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"0 "," TRXTARGETFEE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"SUM(REC.COST) "," FRPCOST","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"SUM(REC.COST) "," ACCOUNTINGCOST","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"SUM(REC.INCOME) "," TRXFEE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"REC.BANK_CHANNEL_NO "," TRXCHANNELID","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"REC.BANKCODE "," BANK_CODE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaosuccess,"REC.PAYER_CARD_TYPE "," CARDTYPE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaotransform,"CUSTOMERNUMBER "," RECEIVERID",DB2INST1.CUSTOMERINFO,reportdb,NULL
+shoukuanbao,shoukuanbaotransform,"ID "," CUSTOMERID",DB2INST1.CUSTOMERINFO,reportdb,NULL
+shoukuanbao,shoukuanbaototal,"COALESCE(CHAR(REG.MAINCUSTOMERNUMBER), 'NULL') || COALESCE(CHAR(REC.SRC), 'NULL') || COALESCE(CHAR(REC.UPDATETIME), 'NULL') || 'SHOUKUANBAOTOTAL' "," IDNOUSE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,"'SKB' "," DATAORIGIN","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,"YEAR(REC.UPDATETIME) * 100 + MONTH(REC.UPDATETIME) "," MONTH","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,"REG.MAINCUSTOMERNUMBER "," RECEIVERID","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,C,"E REC.SRC WHEN 'W' THEN 260 WHEN 'B' THEN 222 WHEN 'D' THEN 222 WHEN 'T' THEN 222 WHEN 'S' THEN 222 WHEN 'J' THEN 260 END ","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,C,"E REC.SRC WHEN 'W' THEN '3011001006001' WHEN 'B' THEN '3011001003001' WHEN 'D' THEN '3011001003001' WHEN 'T' THEN '3011001003001' WHEN 'S' THEN '3011001003001' WHEN 'J' THEN '3011001006001' ELSE 'UNKNOWN' END ","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,"DATE(REC.UPDATETIME) "," TRXDATE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,"'3011004001004A' "," SALES_PRODUCT_CODE","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,"SUM(REC.AMOUNT) "," WHOLEORDERAMOUNT","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbao,shoukuanbaototal,"COUNT(*) "," WHOLEORDERCOUNT","SKB.TBL_SKB_RECEIVE, SKB.TBL_SKB_REGISTER",accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"COALESCE(CHAR(DATE(CREATE_TIME)), 'NULL') || COALESCE(CHAR(AGENT_CUSTOMER_NUMBER), 'NULL') || 'SKBREALNAMEAUTH' "," IDNOUSE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"DATE(CREATE_TIME) "," TRXDATE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"YEAR(DATE(CREATE_TIME)) * 100 + MONTH(DATE(CREATE_TIME)) "," MONTH",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"AGENT_CUSTOMER_NUMBER "," RECEIVERID",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'3011004003001' "," PRODUCT_CODE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'3011004001004A' "," SALES_PRODUCT_CODE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'REALNAMEAUTH' "," ORDERTYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'SKB_REALNAMEAUTH' "," PAYPRODUCT",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"226 "," BIZTYPEID",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'REALNAMEAUTH' "," TYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"1 "," ISCOMPUTEPROFIT",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"1 "," ISCOMPUTEBONUS",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'ONLINE' "," RELEGATION",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'PAID' "," FEETYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'SYSTEM' "," USETYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"'SKB' "," DATAORIGIN",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"COUNT(*) "," TRXCOUNT",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"SUM(COST) "," FRPCOST",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbrealnameauth,"SUM(COST) "," ACCOUNTINGCOST",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"COALESCE(CHAR(DATE(CREATE_TIME)), 'NULL') || COALESCE(CHAR(AGENT_CUSTOMER_NUMBER), 'NULL') || 'SKBCARDJIANQUAN' "," IDNOUSE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"DATE(CREATE_TIME) "," TRXDATE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"YEAR(DATE(CREATE_TIME)) * 100 + MONTH(DATE(CREATE_TIME)) "," MONTH",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"AGENT_CUSTOMER_NUMBER "," RECEIVERID",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'3011004003002' "," PRODUCT_CODE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'3011004001004A' "," SALES_PRODUCT_CODE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'CARDJIANQUAN' "," ORDERTYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'SKB_CARDJIANQUAN' "," PAYPRODUCT",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"226 "," BIZTYPEID",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'CARDJIANQUAN' "," TYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"1 "," ISCOMPUTEPROFIT",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"1 "," ISCOMPUTEBONUS",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'ONLINE' "," RELEGATION",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'PAID' "," FEETYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'SYSTEM' "," USETYPE",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"'SKB' "," DATAORIGIN",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"COUNT(*) "," TRXCOUNT",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"SUM(COST) "," FRPCOST",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,skbcardjianquan,"SUM(COST) "," ACCOUNTINGCOST",SKB.TBL_SKB_AUTH_COST,accnt,NULL
+shoukuanbaoverify,shoukuanbaoverifynum,"CUSTOMERNUMBER "," RECEIVERID",CUSTOMERINFO,reportdb,NULL
+shoukuanbaoverify,shoukuanbaoverifynum,"ID "," CUSTOMERID",CUSTOMERINFO,reportdb,NULL
+shoukuanbao,skbwechatcost,"COALESCE(CHAR(DATE(P.COMPLETE_TIME)), 'NULL') || COALESCE(CHAR(O.CUSTOMER_NO), 'NULL') || 'SKBWECHATCOST' "," IDNOUSE","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"'POSP' "," DATAORIGIN","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"YEAR(DATE(P.COMPLETE_TIME)) * 100 + MONTH(DATE(P.COMPLETE_TIME)) "," MONTH","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"O.CUSTOMER_NO "," RECEIVERID","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"260 "," BIZTYPEID","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"'3011001006001' "," PRODUCT_CODE","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"DATE(P.COMPLETE_TIME) "," TRXDATE","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"'3011004001004A' "," SALES_PRODUCT_CODE","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"SUM(P.BANK_COST) "," FRPCOST","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
+shoukuanbao,skbwechatcost,"SUM(P.BANK_COST) "," ACCOUNTINGCOST","POSWRITE.TBL_MPAY_ORDER, POSWRITE.TBL_MPAY_PAYMENT",opendb,NULL
