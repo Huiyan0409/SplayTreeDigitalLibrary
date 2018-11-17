@@ -58,8 +58,11 @@ public class SplayTreeNodeTests {
 		node.left = leftnode;
 		node.right = rightnode;
 
+
 		String expectedOutput = "An Interesting Book, Antonella, 12345678\nLEFT    |    Another Book, Raphael, 87654312\nRIGHT   |    A Third Book, Allison, 90871234";
 		String output = node.toString();
+		//System.out.println(expectedOutput);
+		//System.out.println(output);
 		assertTrue(output.equals(expectedOutput));
 	}
 	

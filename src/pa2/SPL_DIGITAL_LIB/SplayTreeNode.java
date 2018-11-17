@@ -14,12 +14,14 @@ public class SplayTreeNode<T>{
 	}
 	
 	public String toString() {
-		if(this.left == null) {
-			this.left.data = null;
+		String leftStr = "NULL";//设置默认值
+		String rightStr = "NULL";
+		if(this.left != null) {
+			leftStr = this.left.data.toString();
 		}
-		if(this.right == null) {
-			this.right.data = null;
+		if(this.right != null) {
+			rightStr = this.right.data.toString();
 		}
-		return this.data.toString()+"\nLEFT    |    "+this.left.data.toString()+"\nRIGHT   |    "+this.right.data.toString();
+		return this.data.toString()+"\nLEFT    |    "+leftStr+"\nRIGHT   |    "+rightStr;
 	}
 }

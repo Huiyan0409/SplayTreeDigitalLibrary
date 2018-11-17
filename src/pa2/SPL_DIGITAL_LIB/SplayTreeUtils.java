@@ -4,40 +4,41 @@ import java.util.Comparator;
 
 public class SplayTreeUtils {
 
-	private static Comparator comparatorauthor = (o1, o2) -> {
-        if(o1 instanceof Book && o2 instanceof Book){
-            if(o2==null){
-                return 0;
-            }
-            if(((Book)o1).author!=null&&!((Book)o1).author.equals("")){
-                return ((Book)o1).author.compareTo(((Book)o2).author);
-            }
-        }
-        return 0;
-    };
     
-    private static Comparator comparatorISBN = (o1, o2) -> {
-        if(o1 instanceof Book && o2 instanceof Book){
-            if(o2==null){
-                return 0;
-            }
-            return (int)(((Book)o1).ISBN-((Book)o2).ISBN);
-        }
-        return 0;
-    };
-    
-    public static <T> int compare(T node, T curr, int mode) {
-    	int result = 0;
-    	if(mode == 0) {
-    		comparatorauthor.compare(node, curr);
-    	} else if(mode == 1) {
-    		comparatorISBN.compare(node, curr);
-    	} else {
-    		System.out.println("Unable to compare due to the incorrect mode");
-    		return 0;
-    	}
-    	return result;
+    public static <T> int compare(T nodeData, T currData, int mode) {
+
+		if(nodeData==null || currData==null){
+			return 0;
+		}
+		if(nodeData instanceof Book && currData instanceof Book){
+			if(mode == 0) {
+				return ((Book)nodeData).author.compareTo(((Book)currData).author);
+			} else if(mode == 1) {
+				return (int)(((Book)nodeData).ISBN-((Book)currData).ISBN);
+			} else {
+				System.out.println("Unable to compare due to the incorrect mode");
+				return 0;
+			}
+		}else {
+			return 0;
+		}
     }
+
+
+	public static <T> int compare(String searchitem, T curr, int mode) {
+
+		Book nodeData = null;
+
+		if(mode == 0) {
+			nodeData = new Book("",searchitem,0);//构建比较数据信息
+		} else if(mode == 1) {
+			nodeData = new Book("","",Long.parseLong(searchitem));
+		} else {
+			System.out.println("Unable to compare due to the incorrect mode");
+			return 0;
+		}
+		return compare(nodeData,curr,mode);
+	}
     
 	public static<T> void zig(SplayTreeNode<T> node) {
 		if(node == null || node.parent == null || node.parent.left != node) {
@@ -228,15 +229,26 @@ public class SplayTreeUtils {
 		}
 	}
 
+	public static<T> SplayTreeNode<T> search(SplayTreeNode<T> root, String searchitem, int mode){
+		Book nodeData = null;
 
-	public static<T> SplayTreeNode<T> search(SplayTreeNode<T> root, T searchitem, int mode){
+		if(mode == 0) {
+			nodeData = new Book("",searchitem,0);//构建比较数据信息
+		} else if(mode == 1) {
+			nodeData = new Book("","",Long.parseLong(searchitem));
+		}
+		return search(root,(T)nodeData,mode);
+
+	}
+
+	public static<T> SplayTreeNode<T> search(SplayTreeNode<T> root, T searchitemData, int mode){
 		SplayTreeNode<T> current = root;
 		if(current == null){
 			return null;
 		}else{
 			int result = 0;
 			while(current != null){
-				result = compare(searchitem,current.data,mode);
+				result = compare(searchitemData,current.data,mode);
 				if(result > 0){
 					current = current.right;
 				}else if(result < 0){

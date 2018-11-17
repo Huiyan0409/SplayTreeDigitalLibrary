@@ -187,7 +187,7 @@ public class SplayTreeDigitalLibrary{
 	public static void isbnSearch(long isbn) {
 		Scanner input = new Scanner(System.in);
 		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
-		curr = SplayTreeUtils.search(authorTree,isbn,1);
+		curr = SplayTreeUtils.search(authorTree,String.valueOf(isbn),1);
 		if(curr == null) {
 			System.out.println("Sorry, no books were found with your search term.");
 			return;
