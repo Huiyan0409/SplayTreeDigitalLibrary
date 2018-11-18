@@ -1,10 +1,9 @@
 package pa2.testSuite;
 
-import pa2.SPL_DIGITAL_LIB.*;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+import pa2.SPL_DIGITAL_LIB.SplayTreeDigitalLibrary;
+
+import static org.junit.Assert.assertTrue;
 
 public class SplayTreeDigitalLibraryTests {
 
@@ -22,6 +21,12 @@ public class SplayTreeDigitalLibraryTests {
 		
 		assertTrue(output.equals(expectedOutput)); 
 		
+	}
+
+
+	@Test
+	public void testReadFromOrigin(){
+		new SplayTreeDigitalLibrary().readFromOrigin();
 	}
 	
 }
