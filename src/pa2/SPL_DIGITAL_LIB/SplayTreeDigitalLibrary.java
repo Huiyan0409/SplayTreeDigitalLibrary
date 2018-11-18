@@ -32,7 +32,7 @@ public class SplayTreeDigitalLibrary{
 	public   String main(String[] args) {
 		this.mainArgs = args;
 		this.sc = new Scanner(System.in);
-		output = new StringBuffer();
+		output = new StringBuffer("");
 
 		String welcome = "Welcome to the SPLTREE_DIGITAL_LIBRARY.\n";
 		String loading = "Loading library ...";
@@ -45,7 +45,7 @@ public class SplayTreeDigitalLibrary{
 		System.out.print(done);
 		output.append(done);
 
-		String question = "Please enter ‘author’ to search by author name, ‘ISBN’ to search by reference ISBN, ‘popular’ to see the top books, ‘return’ to return a book, or ‘exit’ to leave the program:";
+		String question = "Please enter ‘author’ to search by author name, ‘ISBN’ to search by reference ISBN, ‘popular’ to see the top books, ‘return’ to return a book, or ‘exit’ to leave the program: ";
 		System.out.print(question);
 		output.append(question) ;
 
@@ -91,7 +91,7 @@ public class SplayTreeDigitalLibrary{
 		}
 		output.append(answer) ;
 		sc.close();
-		return output.toString();// You MUST return all output to the console here
+		return output.toString().trim();// You MUST return all output to the console here
 	}
 	
 	public  void loadData() {
@@ -152,7 +152,9 @@ public class SplayTreeDigitalLibrary{
 			writeTreeToFile(authorLeading, authorTree);
 			writeTreeToFile(isbnLeading, ISBNTree);
 			writeTreeToFile(borrowLeading, borrowTree);
-		}		
+		}else{
+			writeTreeToFile(authorLeading, authorTree);
+		}
 	}
 	
 	public  void isbnSearch(long isbn) {
@@ -191,7 +193,9 @@ public class SplayTreeDigitalLibrary{
 			writeTreeToFile(authorLeading, authorTree);
 			writeTreeToFile(isbnLeading, ISBNTree);
 			writeTreeToFile(borrowLeading, borrowTree);
-		}		
+		}else {
+			writeTreeToFile(isbnLeading, ISBNTree);
+		}
 	}
 	
 	public  void popular() {
@@ -257,8 +261,7 @@ public class SplayTreeDigitalLibrary{
 				if(root == null) {
 					root = newBookNode;
 				}else{
-					SplayTreeUtils.insert(root, newBookNode, mode);
-					root = newBookNode;
+					SplayTreeUtils.insertForNoSpay(root, newBookNode, mode);
 				}
 			}
 		} catch(Exception e) {
@@ -266,7 +269,7 @@ public class SplayTreeDigitalLibrary{
 		}finally {
 			fileSc.close();
 		}
-		return newBookNode;
+		return root;
 	}
 	
 	public  void readFromOrigin() {
@@ -323,11 +326,11 @@ public class SplayTreeDigitalLibrary{
 	}
 
 	public  void buildBorrowTree(SplayTreeNode<Book> oldNode) {
-		SplayTreeNode<Book> newBookNodeForISBNTree = new SplayTreeNode<Book>(oldNode.data);
+		SplayTreeNode<Book> newBookNodeForBorrowTree  = new SplayTreeNode<Book>(oldNode.data);
 		if(borrowTree != null) {
-			SplayTreeUtils.insert(borrowTree, newBookNodeForISBNTree, 0);
+			SplayTreeUtils.insert(borrowTree, newBookNodeForBorrowTree , 0);
 		}
-		borrowTree = newBookNodeForISBNTree;
+		borrowTree = newBookNodeForBorrowTree ;
 	}
 	
 	public  void writeTreeToFile(File a, SplayTreeNode<Book> root){

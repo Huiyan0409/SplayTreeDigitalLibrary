@@ -23,7 +23,8 @@ public class SplayTreeUtils {
 			if(mode == 0) {//if mode is 0, comparing by author
 				return ((Book)nodeData).author.compareTo(((Book)currData).author);
 			} else if(mode == 1) {//if mode is 1, comparing by ISBN
-				return (int)(((Book)nodeData).ISBN-((Book)currData).ISBN);
+				return  new Long(((Book)nodeData).ISBN).compareTo(new Long(((Book)currData).ISBN));
+				//return (int)(((Book)nodeData).ISBN-((Book)currData).ISBN);
 			} else {
 				System.out.println("Unable to compare due to the incorrect mode");
 				return 0;
@@ -193,6 +194,38 @@ public class SplayTreeUtils {
 			}
 			node.parent = parent;
 			splay(node);  //splay the node to the root after insertion
+		}
+	}
+
+	/**
+	 * Insert a splaytreenode to the splay tree
+	 * @param root, the root of the splay tree
+	 * @param node, the node that needs to be inserted
+	 * The running time is O(logn)
+	 */
+	public static<T> void insertForNoSpay(SplayTreeNode<T> root, SplayTreeNode<T> node, int mode) {
+		SplayTreeNode<T> current = root;
+		if(current == null){
+			System.out.println("root is null!");
+			return;
+		}else{
+			int result = 0;
+			SplayTreeNode<T> parent = current;
+			while(current != null){
+				parent = current;
+				result = compare(node.data, current.data, mode);
+				if(result > 0){
+					current = current.right;
+				}else{
+					current = current.left;
+				}
+			}
+			if(result > 0){
+				parent.right = node;
+			}else{
+				parent.left = node;
+			}
+			node.parent = parent;
 		}
 	}
 
