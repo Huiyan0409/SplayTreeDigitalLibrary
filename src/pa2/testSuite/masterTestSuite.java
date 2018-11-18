@@ -7,4 +7,5 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({BookTests.class, SplayTreeNodeTests.class, SplayTreeUtilsTests.class, SplayTreeDigitalLibraryTests.class})
 public class masterTestSuite{
+	
 }

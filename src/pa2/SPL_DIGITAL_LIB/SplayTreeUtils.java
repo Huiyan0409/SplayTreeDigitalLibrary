@@ -1,19 +1,28 @@
 package pa2.SPL_DIGITAL_LIB;
 
-import java.util.Comparator;
-
+/**
+ * This class contains utilities for SplayTreeNodes
+ * @author Huiyan Zhang
+ * nicolezhang@brandeis.edu
+ */
 public class SplayTreeUtils {
 
-    
+    /**
+     * Compare data of two nodes by author or ISBN deciding by mode
+     * @param nodeData, data of node which is going to be compared
+     * @param currData, data of current node
+     * @param mode, an integer supposed to equal to 0 or 1
+     * @return an integer represents the result of comparing
+     * The running time is O(1)
+     */
     public static <T> int compare(T nodeData, T currData, int mode) {
-
 		if(nodeData==null || currData==null){
 			return 0;
 		}
 		if(nodeData instanceof Book && currData instanceof Book){
-			if(mode == 0) {
+			if(mode == 0) {//if mode is 0, comparing by author
 				return ((Book)nodeData).author.compareTo(((Book)currData).author);
-			} else if(mode == 1) {
+			} else if(mode == 1) {//if mode is 1, comparing by ISBN
 				return (int)(((Book)nodeData).ISBN-((Book)currData).ISBN);
 			} else {
 				System.out.println("Unable to compare due to the incorrect mode");
@@ -24,14 +33,21 @@ public class SplayTreeUtils {
 		}
     }
 
-
+    /**
+     * Compare the search item with the data of current node by author or ISBN
+     * @param searchitem, the item that the user wants to search in the splay tree
+     * @param curr, data of node which is going to be compared with
+     * @param mode, an integer supposed to equal to 0 or 1
+     * @return an integer represents the result of comparing after comparing two data of nodes
+     * The running time is O(1)
+     */
 	public static <T> int compare(String searchitem, T curr, int mode) {
 
 		Book nodeData = null;
 
-		if(mode == 0) {
-			nodeData = new Book("",searchitem,0);//构建比较数据信息
-		} else if(mode == 1) {
+		if(mode == 0) {//if mode is 0, comparing by author
+			nodeData = new Book("",searchitem,0);//set the comparing data
+		} else if(mode == 1) {//if mode is 1, comparing by ISBN
 			nodeData = new Book("","",Long.parseLong(searchitem));
 		} else {
 			System.out.println("Unable to compare due to the incorrect mode");
@@ -40,6 +56,11 @@ public class SplayTreeUtils {
 		return compare(nodeData,curr,mode);
 	}
     
+	/**
+	 * Left rotation of splay tree
+	 * @param node, the splayTreeNode that needs to be rotated
+	 * The running time is O(1)
+	 */
 	public static<T> void zig(SplayTreeNode<T> node) {
 		if(node == null || node.parent == null || node.parent.left != node) {
 			System.out.println("Unable to zig rotate!");
@@ -54,7 +75,7 @@ public class SplayTreeUtils {
 		}
 		node.right = beforeParent;
 		beforeParent.parent = node;
-		if(subParent != null) {  //为null则node的parent已被置为null,无需操作
+		if(subParent != null) {  
 			if (subParent.right == beforeParent) {
 				subParent.right = node;
 			} else {
@@ -63,6 +84,11 @@ public class SplayTreeUtils {
 		}
 	}
 
+	/**
+	 * Right rotation of splay tree
+	 * @param node, the splayTreeNode that needs to be rotated
+	 * The running time is O(1)
+	 */
 	public static<T> void zag(SplayTreeNode<T> node) {
 		if(node == null || node.parent == null || node.parent.right != node) {
 			System.out.println("Unable to zag rotate!");
@@ -77,7 +103,7 @@ public class SplayTreeUtils {
 		}
 		node.left = beforeParent;
 		beforeParent.parent = node;
-		if(subParent != null) { //为null则node的parent已被置为null,无需操作
+		if(subParent != null) { 
 			if (subParent.right == beforeParent) {
 				subParent.right = node;
 			} else {
@@ -88,14 +114,16 @@ public class SplayTreeUtils {
 
 
 	/**
-	 * 同一边连续两次旋转
-	 * @param node
+	 * Double rotation for left child of left child or right child of right child
+	 * zig-zig/zag-zag
+	 * @param node, the splayTreeNode that needs to be rotated
+	 * The running time is O(1)
 	 */
 	public static<T> void zig_zig(SplayTreeNode<T> node) {
-		if(node==node.parent.right&&node.parent==node.parent.parent.right) { // '\' 型
+		if(node==node.parent.right&&node.parent==node.parent.parent.right) { // right child of right child
 			zag(node.parent);
 			zag(node);
-		}else if(node==node.parent.left&&node.parent==node.parent.parent.left){ // '/' 型
+		}else if(node==node.parent.left&&node.parent==node.parent.parent.left){ // left child or left child
 			zig(node.parent);
 			zig(node);
 		}else{
@@ -105,14 +133,16 @@ public class SplayTreeUtils {
 	}
 
 	/**
-	 * z字形两次旋转
-	 * @param node
+	 * Double rotation for left child of right child or right child of left child
+	 * zig-zag/zag-zig
+	 * @param node, the splayTreeNode that needs to be rotated
+	 * The running time is O(1)
 	 */
 	public static<T> void zig_zag(SplayTreeNode<T> node) {
-		if(node==node.parent.right&&node.parent==node.parent.parent.left) { // '<' 型
+		if(node==node.parent.right&&node.parent==node.parent.parent.left) { // right child of left child
 			zag(node);
 			zig(node);
-		}else if(node==node.parent.left&&node.parent==node.parent.parent.right) { // '>' 型
+		}else if(node==node.parent.left&&node.parent==node.parent.parent.right) { // left child of right child
 			zig(node);
 			zag(node);
 		}else{
@@ -121,10 +151,11 @@ public class SplayTreeUtils {
 		}
 	}
 	/**
-	 * 添加节点后对树的改变（将新添加的节点旋转为根节点）
-	 * @param node
+	 * splay the new node to the root of the splay tree
+	 * @param node, the splaytreenode that needs to be splayed up
+	 * The running time is O(1)
 	 */
-	private static<T> void splay(SplayTreeNode<T> node) {//首先要明确一点，该方法只会在根不为空的判断里面出现
+	private static<T> void splay(SplayTreeNode<T> node) {
 		if(node != null){
 			while(node.parent != null){
 				if (rotateUp(node)) return;
@@ -133,12 +164,10 @@ public class SplayTreeUtils {
 	}
 
 	/**
-	 * 添加节点
-	 * @param root
-	 * @param node
-	 *
-	 * 添加节点：跟二叉排序树一样添加节点，不过与二叉排序树添加节点不同的是伸展树添加节点后，
-	 * 会把新添加的节点旋转到根节点位置。
+	 * Insert a splaytreenode to the splay tree
+	 * @param root, the root of the splay tree
+	 * @param node, the node that needs to be inserted
+	 * The running time is O(logn)
 	 */
 	public static<T> void insert(SplayTreeNode<T> root, SplayTreeNode<T> node, int mode) {
 		SplayTreeNode<T> current = root;
@@ -163,33 +192,30 @@ public class SplayTreeUtils {
 				parent.left = node;
 			}
 			node.parent = parent;
-			splay(node);  //旋到root
+			splay(node);  //splay the node to the root after insertion
 		}
 	}
 
 	/**
-	 * 删除节点
-	 * @param root
-	 * @param node
-	 * 删除节点：从SplayTree中找出要删除的节点，然后将该节点旋转为根节点，然后再把此时的根节点的左子树中
-	 * 的最大值节点(前驱)旋转为根节点的左子节点（这样根节点的左子节点的子节点只会有左子树，因为它最大），紧接着把根节点
-	 * 的右节点当做根节点的左子节点的右子节点，最后在 删除根节点（也就是要删除的节点）。
+	 * Delete a splaytreenode from a splay tree
+	 * @param root, the root node of the splay tree
+	 * @param node, the node that is going to be deleted
+	 * The running time is O(logn)
 	 */
 	public static<T> SplayTreeNode<T> delete(SplayTreeNode<T> root, SplayTreeNode<T> node, int mode) {
-		//找到要删除的节点
+		//finding out the node that is going to be deleted
 		SplayTreeNode<T> del = search(root,node.data,mode);
 		if(del == null){
 			System.out.println("node not found!");
 			return null;
 		}else{
-			//把要删除的节点旋转为根节点
+			//splay the node that is going to be deleted to be root node
 			splay(del);
 			root = del;
-			//找到此时根节点的前驱
+			//finding the max of left subtree
 			SplayTreeNode frontNodeOfRoot = frontOfNode(root);
-			//把跟的前驱旋转为根节点的左子节点
 			splayToRootLeft(root,frontNodeOfRoot);
-			//去除root，并将左子节点变为root
+			//remove currently root and splay the max of left subtree to the root
 			root.left.right = root.right;
 			if(root.right != null){
 				root.right.parent = root.left;
@@ -202,9 +228,10 @@ public class SplayTreeUtils {
 	}
 
 	/**
-	 * 把根的前驱旋转为根节点的左子节点
-	 * @param root
-	 * @param node
+	 * Rotate the max node in the left subtree to the root of left subtree
+	 * @param root, the root of the splay tree
+	 * @param node, the splaytreenode that needs to be rotated
+	 * The running time is O(logn)
 	 */
 	public static<T> void splayToRootLeft(SplayTreeNode<T> root, SplayTreeNode<T> node) {
 		if(node != null){
@@ -215,7 +242,10 @@ public class SplayTreeUtils {
 	}
 
 	/**
-	 *找到节点的前驱
+	 * Get the right most node in the left subtree which is the max of left subtree
+	 * @param node, the node that is going to be deleted from the splay tree
+	 * @return the max node of the left subtree
+	 * The running time is O(logn)
 	 */
 	public static<T> SplayTreeNode<T> frontOfNode(SplayTreeNode<T> node){
 		if(node == null){
@@ -228,19 +258,34 @@ public class SplayTreeUtils {
 			return current;
 		}
 	}
-
+	
+	/**
+	 * search data from the splay tree when the data is entered as a string
+	 * @param root, the root of the splay tree
+	 * @param searchitem, the data that wants to be found out
+	 * @param mode, an integer equals to 0 or 1 deciding searching by author or ISBN
+	 * @return the node that is found in the splay tree
+	 * The running time is O(logn)
+	 */
 	public static<T> SplayTreeNode<T> search(SplayTreeNode<T> root, String searchitem, int mode){
 		Book nodeData = null;
 
-		if(mode == 0) {
-			nodeData = new Book("",searchitem,0);//构建比较数据信息
-		} else if(mode == 1) {
+		if(mode == 0) {//search by author if mode is 0
+			nodeData = new Book("",searchitem,0);//build up the node element for searching
+		} else if(mode == 1) {//search by ISBn if mode is 1
 			nodeData = new Book("","",Long.parseLong(searchitem));
 		}
 		return search(root,(T)nodeData,mode);
-
 	}
 
+	/**
+	 * search a splaytreenode from a splay tree
+	 * @param root, the root of the splay tree
+	 * @param searchitemData, the data of the splaytreenode that wants to be found out in the splay tree
+	 * @param mode, an integer equals to 0 or 1 deciding searching by author or ISBN
+	 * @return the node that is found in the splay tree
+	 * The running time is O(logn)
+	 */
 	public static<T> SplayTreeNode<T> search(SplayTreeNode<T> root, T searchitemData, int mode){
 		SplayTreeNode<T> current = root;
 		if(current == null){
@@ -261,7 +306,12 @@ public class SplayTreeUtils {
 		}
 	}
 
-
+	/**
+	 * Rotate up the splay tree node 
+	 * @param node,the node that needs to be rotated up
+	 * @return false if rotate successfully, true if not
+	 * The running time is O(1)
+	 */
 	private static<T> boolean rotateUp(SplayTreeNode<T> node) {
 		if(node == node.parent.left){
 			if(node.parent.parent == null){

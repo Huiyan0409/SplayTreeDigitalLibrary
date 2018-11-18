@@ -1,11 +1,16 @@
 package pa2.testSuite;
 
-import pa2.SPL_DIGITAL_LIB.*;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+import pa2.SPL_DIGITAL_LIB.Book;
+import pa2.SPL_DIGITAL_LIB.SplayTreeNode;
 
+import static org.junit.Assert.assertTrue;
+
+/**
+ * This class tests the SplayTreeNode class
+ * @author Huiyan Zhang
+ * nicolezhang@brandeis.edu
+ */
 public class SplayTreeNodeTests {
 	
 	@Test
@@ -58,11 +63,8 @@ public class SplayTreeNodeTests {
 		node.left = leftnode;
 		node.right = rightnode;
 
-
 		String expectedOutput = "An Interesting Book, Antonella, 12345678\nLEFT    |    Another Book, Raphael, 87654312\nRIGHT   |    A Third Book, Allison, 90871234";
 		String output = node.toString();
-		//System.out.println(expectedOutput);
-		//System.out.println(output);
 		assertTrue(output.equals(expectedOutput));
 	}
 	

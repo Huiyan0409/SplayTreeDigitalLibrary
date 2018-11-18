@@ -2,6 +2,7 @@ package pa2.SPL_DIGITAL_LIB;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Scanner;
 
@@ -10,6 +11,14 @@ public class SplayTreeDigitalLibrary{
 	public static SplayTreeNode<Book> authorTree;
 	public static SplayTreeNode<Book> ISBNTree;
 	public static SplayTreeNode<Book> borrowTree;
+	public static File authorLeading = new File("spltreedigi_lib_auth.txt");
+	public static File isbnLeading = new File("spltreedigi_lib_isbn.txt");
+	public static File borrowLeading = new File("spltreedigi_lib_borrowed.txt");
+	
+	
+	public static void main1(String[] args) {
+		 System.out.println(main(args));
+	}
 	 
 	public String main(String[] args) {
 		String output = "";
@@ -44,16 +53,13 @@ public class SplayTreeDigitalLibrary{
 			} else {
 				System.out.println("Unvalid request!");
 			}
-			System.out.println(question);
+			output = output + question;
 			answer = sc.next();
 		}
 		return output;// You MUST return all output to the console here
 	}
 	
 	public static void loadData() {
-		File authorLeading = new File("spltreedigi_lib_auth.txt");
-		File isbnLeading = new File("spltreedigi_lib_isbn.txt");
-		File borrowLeading = new File("spltreedigi_lib_borrowed.txt");
 		if(!authorLeading.exists() && !isbnLeading.exists() && !borrowLeading.exists()) {
 			try {
 				authorLeading.createNewFile();
@@ -67,9 +73,98 @@ public class SplayTreeDigitalLibrary{
 			readFile(authorLeading,authorTree,0);
 			readFile(isbnLeading,ISBNTree,1);
 			readFile(borrowLeading,borrowTree,0);
+			if(authorTree == null && ISBNTree == null) {
+				readFromOrigin();
+			}
 		}
 		System.out.println("DONE");
 		System.out.println("");
+	}
+	
+		
+	public static void authorSearch(String authorName) {
+		Scanner input = new Scanner(System.in);
+		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
+		curr = SplayTreeUtils.search(authorTree,authorName,0);
+		if(curr == null) {
+			System.out.println("Sorry, no books were found with your search term.");
+			return;
+		}
+		System.out.println("The following entry matched your search term: "+curr.data.toString());
+		System.out.println("Would you like to borrow this book?(y/n)");
+		String answer = input.next();
+		while(!answer.equalsIgnoreCase("y") || !answer.equalsIgnoreCase("n")) {
+			System.out.println("Would you like to borrow this book?(y/n)");
+			answer = input.next();
+		}
+		if(answer.equalsIgnoreCase("y")) {
+			SplayTreeUtils.delete(authorTree, curr, 0);
+			SplayTreeUtils.delete(ISBNTree, curr, 1);
+			SplayTreeUtils.insert(borrowTree, curr, 0);
+			writeToFile(authorLeading, authorTree);
+			writeToFile(isbnLeading, ISBNTree);
+			writeToFile(borrowLeading, borrowTree);
+		}		
+	}
+	
+	public static void isbnSearch(long isbn) {
+		Scanner input = new Scanner(System.in);
+		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
+		String isbnStr = String.valueOf(isbn);
+		curr = SplayTreeUtils.search(authorTree,isbnStr,1);
+		if(curr == null) {
+			System.out.println("Sorry, no books were found with your search term.");
+			return;
+		}
+		System.out.println("The following entry matched your search term: "+curr.data.toString());
+		System.out.println("Would you like to borrow this book?(y/n)");
+		String answer = input.next();
+		while(!answer.equalsIgnoreCase("y") || !answer.equalsIgnoreCase("n")) {
+			System.out.println("Would you like to borrow this book?(y/n)");
+			answer = input.next();
+		}
+		if(answer.equalsIgnoreCase("y")) {
+			SplayTreeUtils.delete(authorTree, curr, 0);
+			SplayTreeUtils.delete(ISBNTree, curr, 1);
+			SplayTreeUtils.insert(borrowTree, curr, 0);
+			writeToFile(authorLeading, authorTree);
+			writeToFile(isbnLeading, ISBNTree);
+			writeToFile(borrowLeading, borrowTree);
+		}		
+	}
+	
+	public static void popular() {
+		System.out.println(authorTree.toString());
+		System.out.println("");
+		System.out.println(ISBNTree.toString());
+	}
+	
+	public static void returnBook(String authorName) {
+		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
+		curr = SplayTreeUtils.search(borrowTree,authorName,0);
+		if(curr == null) {
+			System.out.println("Sorry, no books were borrowed with that author");
+			return;
+		}
+		System.out.println("Thank you for returning this book");
+		SplayTreeUtils.delete(borrowTree, curr, 0);
+		SplayTreeUtils.insert(ISBNTree, curr, 1);
+		SplayTreeUtils.insert(authorTree, curr, 0);
+		writeToFile(authorLeading, authorTree);
+		writeToFile(isbnLeading, ISBNTree);
+		writeToFile(borrowLeading, borrowTree);
+	}
+	
+	public static SplayTreeNode<Book> authorSplayTree(){
+		return authorTree;
+	}
+	
+	public static SplayTreeNode<Book> isbnSplayTree(){
+		return ISBNTree;
+	}
+	
+	public static SplayTreeNode<Book> borrowedSplayTree(){
+		return borrowTree;
 	}
 	
 	public static void readFile(File file, SplayTreeNode<Book> root, int mode) {
@@ -161,80 +256,17 @@ public class SplayTreeDigitalLibrary{
 		}
 	}
 	
-	
-	public static void authorSearch(String authorName) {
-		Scanner input = new Scanner(System.in);
-		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
-		curr = SplayTreeUtils.search(authorTree,authorName,0);
-		if(curr == null) {
-			System.out.println("Sorry, no books were found with your search term.");
-			return;
+	public static void writeToFile(File a, SplayTreeNode<Book> root){
+		try {
+			FileWriter writer = new FileWriter(a);
+			if(root == null) {
+				return;
+			}
+			writer.write(root.toString()+"\n");
+			writeToFile(a,root.left);
+			writeToFile(a,root.right);
+		} catch(Exception e) {
+			
 		}
-		System.out.println("The following entry matched your search term: "+curr.data.toString());
-		System.out.println("Would you like to borrow this book?(y/n)");
-		String answer = input.next();
-		while(!answer.equalsIgnoreCase("y") || !answer.equalsIgnoreCase("n")) {
-			System.out.println("Would you like to borrow this book?(y/n)");
-			answer = input.next();
-		}
-		if(answer.equalsIgnoreCase("y")) {
-			SplayTreeUtils.delete(authorTree, curr, 0);
-			SplayTreeUtils.delete(ISBNTree, curr, 1);
-			SplayTreeUtils.insert(borrowTree, curr, 0);
-		}		
 	}
-	
-	public static void isbnSearch(long isbn) {
-		Scanner input = new Scanner(System.in);
-		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
-		curr = SplayTreeUtils.search(authorTree,String.valueOf(isbn),1);
-		if(curr == null) {
-			System.out.println("Sorry, no books were found with your search term.");
-			return;
-		}
-		System.out.println("The following entry matched your search term: "+curr.data.toString());
-		System.out.println("Would you like to borrow this book?(y/n)");
-		String answer = input.next();
-		while(!answer.equalsIgnoreCase("y") || !answer.equalsIgnoreCase("n")) {
-			System.out.println("Would you like to borrow this book?(y/n)");
-			answer = input.next();
-		}
-		if(answer.equalsIgnoreCase("y")) {
-			SplayTreeUtils.delete(authorTree, curr, 0);
-			SplayTreeUtils.delete(ISBNTree, curr, 1);
-			SplayTreeUtils.insert(borrowTree, curr, 0);
-		}		
-	}
-	
-	public static void popular() {
-		System.out.println(authorTree.toString());
-		System.out.println("");
-		System.out.println(ISBNTree.toString());
-	}
-	
-	public static void returnBook(String authorName) {
-		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
-		curr = SplayTreeUtils.search(borrowTree,authorName,0);
-		if(curr == null) {
-			System.out.println("Sorry, no books were borrowed with that author");
-			return;
-		}
-		System.out.println("Thank you for returning this book");
-		SplayTreeUtils.delete(borrowTree, curr, 0);
-		SplayTreeUtils.insert(ISBNTree, curr, 1);
-		SplayTreeUtils.insert(authorTree, curr, 0);
-	}
-	
-	public static SplayTreeNode<Book> authorSplayTree(){
-		return authorTree;
-	}
-	
-	public static SplayTreeNode<Book> isbnSplayTree(){
-		return ISBNTree;
-	}
-	
-	public static SplayTreeNode<Book> borrowedSplayTree(){
-		return borrowTree;
-	}
-
 }

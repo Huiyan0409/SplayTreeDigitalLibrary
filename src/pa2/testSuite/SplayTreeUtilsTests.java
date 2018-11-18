@@ -1,13 +1,18 @@
 package pa2.testSuite;
 
 import org.junit.Before;
-import pa2.SPL_DIGITAL_LIB.*;
+import org.junit.Test;
+import pa2.SPL_DIGITAL_LIB.Book;
+import pa2.SPL_DIGITAL_LIB.SplayTreeNode;
 import pa2.SPL_DIGITAL_LIB.SplayTreeUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-
+/**
+ * This class tests the SplayTreeUtils
+ * @author Huiyan Zhanhg
+ * nicolezhang@brandeis.edu
+ */
 public class SplayTreeUtilsTests{
 
 	private SplayTreeNode<Book> node1;
