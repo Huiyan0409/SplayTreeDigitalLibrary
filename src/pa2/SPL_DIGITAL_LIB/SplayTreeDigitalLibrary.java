@@ -35,7 +35,7 @@ public class SplayTreeDigitalLibrary{
 		output = new StringBuffer("");
 
 		String welcome = "Welcome to the SPLTREE_DIGITAL_LIBRARY.\n";
-		String loading = "Loading library ...";
+		String loading = "Loading library...";
 		System.out.print(welcome);
 		System.out.print(loading);
 		output.append(welcome).append(loading);
@@ -299,8 +299,7 @@ public class SplayTreeDigitalLibrary{
 					System.out.println("Invalid record format:"+line);
 				}
 			}
-//			System.out.println("authorTree:"+authorTree.toString());
-//			System.out.println("ISBNTree:"+ISBNTree.toString());
+
 			writeTreeToFile(authorLeading, authorTree);//加载完毕后在进行写入
 			writeTreeToFile(isbnLeading, ISBNTree);
 			writeTreeToFile(borrowLeading, borrowTree);

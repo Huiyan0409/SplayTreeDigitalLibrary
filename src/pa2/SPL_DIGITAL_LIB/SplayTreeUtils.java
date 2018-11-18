@@ -333,7 +333,6 @@ public class SplayTreeUtils {
 						current = current.left;
 				}else{
 					splay(current);
-					System.out.print("find :"+current.data.toString());
 					return current;
 				}
 			}
