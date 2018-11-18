@@ -295,10 +295,12 @@ public class SplayTreeUtils {
 			while(current != null){
 				result = compare(searchitemData,current.data,mode);
 				if(result > 0){
-					current = current.right;
+						current = current.right;
 				}else if(result < 0){
-					current = current.left;
+						current = current.left;
 				}else{
+					splay(current);
+					System.out.print("find :"+current.data.toString());
 					return current;
 				}
 			}

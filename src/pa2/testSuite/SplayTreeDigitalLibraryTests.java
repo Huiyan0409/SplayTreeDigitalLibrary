@@ -3,6 +3,8 @@ package pa2.testSuite;
 import org.junit.Test;
 import pa2.SPL_DIGITAL_LIB.SplayTreeDigitalLibrary;
 
+import java.io.File;
+
 import static org.junit.Assert.assertTrue;
 
 public class SplayTreeDigitalLibraryTests {
@@ -23,10 +25,23 @@ public class SplayTreeDigitalLibraryTests {
 		
 	}
 
+	@Test
+	public void  testMain(){
+		SplayTreeDigitalLibrary digilib = new SplayTreeDigitalLibrary();
+		digilib.main(null);
+	}
 
 	@Test
-	public void testReadFromOrigin(){
+	public void testReadFromOriginForFirstReader(){
+
+		File authorLeading = new File("spltreedigi_lib_auth.txt");
+		File isbnLeading = new File("spltreedigi_lib_isbn.txt");
+		File borrowLeading = new File("spltreedigi_lib_borrowed.txt");
+		authorLeading.delete();
+		isbnLeading.delete();
+		borrowLeading.delete();
 		new SplayTreeDigitalLibrary().readFromOrigin();
 	}
+
 	
 }

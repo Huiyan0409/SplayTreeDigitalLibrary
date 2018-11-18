@@ -2,7 +2,6 @@ package pa2.SPL_DIGITAL_LIB;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.Writer;
 import java.util.Scanner;
 
 public class SplayTreeDigitalLibrary{
@@ -13,15 +12,15 @@ public class SplayTreeDigitalLibrary{
 	public static File authorLeading = new File("spltreedigi_lib_auth.txt");
 	public static File isbnLeading = new File("spltreedigi_lib_isbn.txt");
 	public static File borrowLeading = new File("spltreedigi_lib_borrowed.txt");
-	private String[] mainArgs = null;
-	private int mainArgsIndex = 0;
+	private String[] mainArgs = null;//程序入参
+	private int mainArgsIndex = 0;//入参使用下标
 	private Scanner sc = null;
-	private StringBuffer output = null;
+	private StringBuffer output = null;//main方法输出结果
 	
 
 	public String getNextAnswer(){
 		if(mainArgs==null||(mainArgsIndex>=mainArgs.length)){
-			return sc.next();
+			return sc.nextLine();
 		}else{
 			String argStr = mainArgs[mainArgsIndex];
 			mainArgsIndex++;
@@ -137,7 +136,7 @@ public class SplayTreeDigitalLibrary{
 
 		String answer = getNextAnswer();
 		output.append(answer).append("\n");
-		while(!answer.equalsIgnoreCase("y") || !answer.equalsIgnoreCase("n")) {
+		while(!answer.equalsIgnoreCase("y") && !answer.equalsIgnoreCase("n")) {
 			responseStr = "Would you like to borrow this book?(y/n)";
 			System.out.print(responseStr);
 			output.append(responseStr);
@@ -145,12 +144,12 @@ public class SplayTreeDigitalLibrary{
 			output.append(answer).append("\n");
 		}
 		if(answer.equalsIgnoreCase("y")) {
-			SplayTreeUtils.delete(authorTree, curr, 0);
-			SplayTreeUtils.delete(ISBNTree, curr, 1);
-			SplayTreeUtils.insert(borrowTree, curr, 0);
-			writeToFile(authorLeading, authorTree);
-			writeToFile(isbnLeading, ISBNTree);
-			writeToFile(borrowLeading, borrowTree);
+			authorTree = SplayTreeUtils.delete(authorTree, curr, 0);
+			ISBNTree = SplayTreeUtils.delete(ISBNTree, curr, 1);
+			buildBorrowTree(curr);
+			writeTreeToFile(authorLeading, authorTree);
+			writeTreeToFile(isbnLeading, ISBNTree);
+			writeTreeToFile(borrowLeading, borrowTree);
 		}		
 	}
 	
@@ -175,7 +174,7 @@ public class SplayTreeDigitalLibrary{
 
 		String answer = getNextAnswer();
 		output.append(answer).append("\n");
-		while(!answer.equalsIgnoreCase("y") || !answer.equalsIgnoreCase("n")) {
+		while(!answer.equalsIgnoreCase("y") && !answer.equalsIgnoreCase("n")) {
 			responseStr = "Would you like to borrow this book?(y/n)";
 			System.out.print(responseStr);
 			output.append(responseStr);
@@ -183,12 +182,12 @@ public class SplayTreeDigitalLibrary{
 			output.append(answer).append("\n");
 		}
 		if(answer.equalsIgnoreCase("y")) {
-			SplayTreeUtils.delete(authorTree, curr, 0);
-			SplayTreeUtils.delete(ISBNTree, curr, 1);
-			SplayTreeUtils.insert(borrowTree, curr, 0);
-			writeToFile(authorLeading, authorTree);
-			writeToFile(isbnLeading, ISBNTree);
-			writeToFile(borrowLeading, borrowTree);
+			authorTree = SplayTreeUtils.delete(authorTree, curr, 0);
+			ISBNTree = SplayTreeUtils.delete(ISBNTree, curr, 1);
+			buildBorrowTree(curr);
+			writeTreeToFile(authorLeading, authorTree);
+			writeTreeToFile(isbnLeading, ISBNTree);
+			writeTreeToFile(borrowLeading, borrowTree);
 		}		
 	}
 	
@@ -214,12 +213,13 @@ public class SplayTreeDigitalLibrary{
 		responseStr="Thank you for returning this book.";
 		System.out.print(responseStr);
 		output.append(responseStr);
-		SplayTreeUtils.delete(borrowTree, curr, 0);
-		SplayTreeUtils.insert(ISBNTree, curr, 1);
-		SplayTreeUtils.insert(authorTree, curr, 0);
-		writeToFile(authorLeading, authorTree);
-		writeToFile(isbnLeading, ISBNTree);
-		writeToFile(borrowLeading, borrowTree);
+		borrowTree = SplayTreeUtils.delete(borrowTree, curr, 0);
+		buildISBNTree(ISBNTree);
+		buildAuthorTree(authorTree);
+
+		writeTreeToFile(authorLeading, authorTree);
+		writeTreeToFile(isbnLeading, ISBNTree);
+		writeTreeToFile(borrowLeading, borrowTree);
 	}
 	
 	public  SplayTreeNode<Book> authorSplayTree(){
@@ -236,27 +236,18 @@ public class SplayTreeDigitalLibrary{
 	
 	public  SplayTreeNode<Book> readFile(File file, SplayTreeNode<Book> root, int mode) {
 		SplayTreeNode<Book> newBookNode = null;
+		Scanner fileSc = null;
 		try {
-			Scanner sc = new Scanner(file);
-			while(sc.hasNext()) {
-				String tab = " ";
-				char tabb = tab.charAt(0);
-				int i = 1;
-				String line = sc.nextLine();
-				int titleIndex = line.indexOf("  ");
+			fileSc = new Scanner(file);
+			String tab = "\t";
+			String line ="";
+			while(fileSc.hasNext()) {
+				line = fileSc.nextLine();
+				int titleIndex = line.indexOf(tab);
 				String title = line.substring(0, titleIndex);
-				int authorIndex = line.indexOf("  ",titleIndex+1);
+				int authorIndex = line.indexOf(tab,titleIndex+1);
 				String author = line.substring(titleIndex+1, authorIndex);
-				while(author.charAt(0) == tabb) {
-					author = author.substring(i, authorIndex);
-					i++;
-				}
 				String ISBNString = line.substring(authorIndex+1);
-				i=1;
-				while(ISBNString.charAt(0) == tabb) {
-					ISBNString = ISBNString.substring(authorIndex+1+i);
-					i++;
-				}
 				long ISBN = Long.parseLong(ISBNString);
 				Book newBook = new Book(title, author, ISBN);
 				newBookNode = new SplayTreeNode<Book>(newBook);
@@ -269,20 +260,21 @@ public class SplayTreeDigitalLibrary{
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
+		}finally {
+			fileSc.close();
 		}
 		return newBookNode;
 	}
 	
 	public  void readFromOrigin() {
+		Scanner fileSc = null;
 		try {
-			Scanner sc = new Scanner(new File("./src/pa2/SPL_DIGITAL_LIB/spltree_digi_lib_baselib_ok.txt"));
-			Writer writeAuthorTree = new FileWriter("spltreedigi_lib_auth.txt");
-			Writer writeISBNTree = new FileWriter("spltreedigi_lib_isbn.txt");
-			while(sc.hasNext()) {
+			fileSc = new Scanner(new File("./src/pa2/SPL_DIGITAL_LIB/spltree_digi_lib_baselib.txt"));
+			while(fileSc.hasNext()) {
 				String tab = "\t";
 				String line ="";
 				try {
-					line = sc.nextLine();
+					line = fileSc.nextLine();
 					int titleIndex = line.indexOf(tab);
 					String title = line.substring(0, titleIndex);
 					int authorIndex = line.indexOf(tab,titleIndex+1);
@@ -296,15 +288,20 @@ public class SplayTreeDigitalLibrary{
 					//一个节点不能同时存在于两棵树
 					buildAuthorTree(newBookNodeForAuthorTree);
 					buildISBNTree(newBookNodeForISBNTree);
-	//				writeAuthorTree.write(newBookNode.toString()+"\n");
-	//				writeISBNTree.write(newBookNode.toString()+"\n");
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("Invalid record format:"+line);
 				}
 			}
+//			System.out.println("authorTree:"+authorTree.toString());
+//			System.out.println("ISBNTree:"+ISBNTree.toString());
+			writeTreeToFile(authorLeading, authorTree);//加载完毕后在进行写入
+			writeTreeToFile(isbnLeading, ISBNTree);
+			writeTreeToFile(borrowLeading, borrowTree);
 		} catch(Exception e) {
 			e.printStackTrace();
+		}finally {
+			fileSc.close();
 		}
 	}
 	
@@ -321,18 +318,36 @@ public class SplayTreeDigitalLibrary{
 		}
 		ISBNTree = newBook;
 	}
+
+	public  void buildBorrowTree(SplayTreeNode<Book> newBook) {
+		if(borrowTree != null) {
+			SplayTreeUtils.insert(borrowTree, newBook, 0);
+		}
+		borrowTree = newBook;
+	}
 	
-	public  void writeToFile(File a, SplayTreeNode<Book> root){
+	public  void writeTreeToFile(File a, SplayTreeNode<Book> root){
 		try {
 			FileWriter writer = new FileWriter(a);
+			writeToFiles(writer,root);
+			writer.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public  void writeToFiles(FileWriter writer, SplayTreeNode<Book> root){
+		try {
 			if(root == null) {
 				return;
 			}
-			writer.write(root.toString()+"\n");
-			writeToFile(a,root.left);
-			writeToFile(a,root.right);
+			writer.write(root.data.title+"\t"+root.data.author+"\t"+root.data.ISBN+"\n");
+			writeToFiles(writer,root.left);
+			writeToFiles(writer,root.right);
 		} catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
+
+
 }
