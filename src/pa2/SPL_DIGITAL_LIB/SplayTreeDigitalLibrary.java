@@ -29,7 +29,7 @@ public class SplayTreeDigitalLibrary{
 		}
 	}
 
-	 
+
 	public   String main(String[] args) {
 		this.mainArgs = args;
 		this.sc = new Scanner(System.in);
@@ -105,9 +105,9 @@ public class SplayTreeDigitalLibrary{
 			}
 			readFromOrigin();
 		} else {
-			readFile(authorLeading,authorTree,0);
-			readFile(isbnLeading,ISBNTree,1);
-			readFile(borrowLeading,borrowTree,0);
+			authorTree = readFile(authorLeading,authorTree,0);
+			ISBNTree = readFile(isbnLeading,ISBNTree,1);
+			borrowTree = readFile(borrowLeading,borrowTree,0);
 			if(authorTree == null && ISBNTree == null) {
 				readFromOrigin();
 			}
@@ -234,7 +234,8 @@ public class SplayTreeDigitalLibrary{
 		return borrowTree;
 	}
 	
-	public  void readFile(File file, SplayTreeNode<Book> root, int mode) {
+	public  SplayTreeNode<Book> readFile(File file, SplayTreeNode<Book> root, int mode) {
+		SplayTreeNode<Book> newBookNode = null;
 		try {
 			Scanner sc = new Scanner(file);
 			while(sc.hasNext()) {
@@ -258,21 +259,23 @@ public class SplayTreeDigitalLibrary{
 				}
 				long ISBN = Long.parseLong(ISBNString);
 				Book newBook = new Book(title, author, ISBN);
-				SplayTreeNode<Book> newBookNode = new SplayTreeNode<Book>(newBook);
+				newBookNode = new SplayTreeNode<Book>(newBook);
 				if(root == null) {
 					root = newBookNode;
 				}else{
 					SplayTreeUtils.insert(root, newBookNode, mode);
+					root = newBookNode;
 				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return newBookNode;
 	}
 	
 	public  void readFromOrigin() {
 		try {
-			Scanner sc = new Scanner(new File("./src/pa2/SPL_DIGITAL_LIB/spltree_digi_lib_baselib.txt"));
+			Scanner sc = new Scanner(new File("./src/pa2/SPL_DIGITAL_LIB/spltree_digi_lib_baselib_ok.txt"));
 			Writer writeAuthorTree = new FileWriter("spltreedigi_lib_auth.txt");
 			Writer writeISBNTree = new FileWriter("spltreedigi_lib_isbn.txt");
 			while(sc.hasNext()) {
@@ -288,11 +291,13 @@ public class SplayTreeDigitalLibrary{
 					String ISBNString = line.substring(authorIndex+1);
 					long ISBN = Long.parseLong(ISBNString);
 					Book newBook = new Book(title, author, ISBN);
-					SplayTreeNode<Book> newBookNode = new SplayTreeNode<Book>(newBook);
-				buildAuthorTree(newBookNode);
-				buildISBNTree(newBookNode);
-//				writeAuthorTree.write(newBookNode.toString()+"\n");
-//				writeISBNTree.write(newBookNode.toString()+"\n");
+					SplayTreeNode<Book> newBookNodeForAuthorTree = new SplayTreeNode<Book>(newBook);
+					SplayTreeNode<Book> newBookNodeForISBNTree = new SplayTreeNode<Book>(newBook);
+					//一个节点不能同时存在于两棵树
+					buildAuthorTree(newBookNodeForAuthorTree);
+					buildISBNTree(newBookNodeForISBNTree);
+	//				writeAuthorTree.write(newBookNode.toString()+"\n");
+	//				writeISBNTree.write(newBookNode.toString()+"\n");
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("Invalid record format:"+line);
@@ -304,19 +309,17 @@ public class SplayTreeDigitalLibrary{
 	}
 	
 	public  void buildAuthorTree(SplayTreeNode<Book> newBook) {
-		if(authorTree == null) {
-			authorTree = newBook;
-		} else {
+		if(authorTree != null) {
 			SplayTreeUtils.insert(authorTree, newBook, 0);
-		}	
+		}
+		authorTree = newBook;
 	}
 	
 	public  void buildISBNTree(SplayTreeNode<Book> newBook) {
-		if(ISBNTree == null) {
-			ISBNTree = newBook;
-		} else {
+		if(ISBNTree != null) {
 			SplayTreeUtils.insert(ISBNTree, newBook, 1);
 		}
+		ISBNTree = newBook;
 	}
 	
 	public  void writeToFile(File a, SplayTreeNode<Book> root){
