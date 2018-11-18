@@ -71,6 +71,7 @@ public class SplayTreeDigitalLibrary{
 					long isbn = Long.parseLong(ISBNInput);
 					isbnSearch(isbn);
 				} catch(Exception e){
+					e.printStackTrace();
 					System.out.println("Unvalid ISBN Input");
 				}
 			} else if (answer.equalsIgnoreCase("popular")) {
@@ -126,6 +127,7 @@ public class SplayTreeDigitalLibrary{
 			output.append(responseStr);
 			return;
 		}
+		authorTree = curr;
 		responseStr = "The following entry matched your search term: "+curr.data.toString()+"\n";
 		System.out.print(responseStr);
 		output.append(responseStr);
@@ -157,13 +159,14 @@ public class SplayTreeDigitalLibrary{
 		String responseStr = "";
 		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
 		String isbnStr = String.valueOf(isbn);
-		curr = SplayTreeUtils.search(authorTree,isbnStr,1);
+		curr = SplayTreeUtils.search(ISBNTree,isbnStr,1);
 		if(curr == null) {
 			responseStr="Sorry, no books were found with your search term.\n";
 			System.out.print(responseStr);
 			output.append(responseStr);
 			return;
 		}
+		ISBNTree = curr;
 		responseStr = "The following entry matched your search term: "+curr.data.toString()+"\n";
 		System.out.print(responseStr);
 		output.append(responseStr);
@@ -196,7 +199,7 @@ public class SplayTreeDigitalLibrary{
 		output.append(authorTree.data.toString()).append("\n");
 		System.out.println(ISBNTree.data.toString());
 		System.out.println("");
-		output.append(authorTree.data.toString()).append("\n\n");
+		output.append(ISBNTree.data.toString()).append("\n\n");
 
 	}
 	
@@ -305,25 +308,26 @@ public class SplayTreeDigitalLibrary{
 		}
 	}
 	
-	public  void buildAuthorTree(SplayTreeNode<Book> newBook) {
+	public  void buildAuthorTree(SplayTreeNode<Book> newNode) {
 		if(authorTree != null) {
-			SplayTreeUtils.insert(authorTree, newBook, 0);
+			SplayTreeUtils.insert(authorTree, newNode, 0);
 		}
-		authorTree = newBook;
+		authorTree = newNode;
 	}
 	
-	public  void buildISBNTree(SplayTreeNode<Book> newBook) {
+	public  void buildISBNTree(SplayTreeNode<Book> newNode) {
 		if(ISBNTree != null) {
-			SplayTreeUtils.insert(ISBNTree, newBook, 1);
+			SplayTreeUtils.insert(ISBNTree, newNode, 1);
 		}
-		ISBNTree = newBook;
+		ISBNTree = newNode;
 	}
 
-	public  void buildBorrowTree(SplayTreeNode<Book> newBook) {
+	public  void buildBorrowTree(SplayTreeNode<Book> oldNode) {
+		SplayTreeNode<Book> newBookNodeForISBNTree = new SplayTreeNode<Book>(oldNode.data);
 		if(borrowTree != null) {
-			SplayTreeUtils.insert(borrowTree, newBook, 0);
+			SplayTreeUtils.insert(borrowTree, newBookNodeForISBNTree, 0);
 		}
-		borrowTree = newBook;
+		borrowTree = newBookNodeForISBNTree;
 	}
 	
 	public  void writeTreeToFile(File a, SplayTreeNode<Book> root){
