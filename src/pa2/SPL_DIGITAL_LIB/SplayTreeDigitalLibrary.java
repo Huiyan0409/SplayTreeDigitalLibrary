@@ -126,7 +126,7 @@ public class SplayTreeDigitalLibrary{
 		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
 		curr = SplayTreeUtils.search(authorTree,authorName,0);
 		authorTree = curr;
-		if(!curr.data.author.equals(authorName)) {
+		if(curr==null||!curr.data.author.equals(authorName)) {
 			responseStr="Sorry, no books were found with your search term.\n";
 			System.out.print(responseStr);
 			output.append(responseStr);
@@ -168,7 +168,7 @@ public class SplayTreeDigitalLibrary{
 		String isbnStr = String.valueOf(isbn);
 		curr = SplayTreeUtils.search(ISBNTree,isbnStr,1);
 		ISBNTree = curr;
-		if(!(curr.data.ISBN == isbn)) {
+		if(curr==null||!(curr.data.ISBN == isbn)) {
 			responseStr="Sorry, no books were found with your search term.\n";
 			System.out.print(responseStr);
 			output.append(responseStr);
@@ -219,7 +219,7 @@ public class SplayTreeDigitalLibrary{
 		curr1 = SplayTreeUtils.search(borrowTree,authorName,0);
 		borrowTree = curr1;
 		Book newbook = curr1.data;
-		if(!curr1.data.author.equals(authorName)) {
+		if(curr1==null||!curr1.data.author.equals(authorName)) {
 			responseStr="Sorry, no books were borrowed with that author.\n";
 			System.out.print(responseStr);
 			output.append(responseStr);
