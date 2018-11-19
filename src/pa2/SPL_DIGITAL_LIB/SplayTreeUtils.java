@@ -236,7 +236,7 @@ public class SplayTreeUtils {
 	 */
 	public static<T> SplayTreeNode<T> delete(SplayTreeNode<T> root, SplayTreeNode<T> node, int mode) {
 		//finding out the node that is going to be deleted
-		SplayTreeNode<T> del = search(root,node.data,mode);
+		SplayTreeNode<T> del = node;
 		if(del == null){
 			System.out.println("node not found!");
 			return null;
