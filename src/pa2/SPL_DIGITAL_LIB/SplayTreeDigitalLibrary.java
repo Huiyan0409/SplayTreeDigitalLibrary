@@ -4,18 +4,23 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
+/**
+ * This class implements the digital library
+ * @author Huiyan Zhang
+ * nicolezhang
+ */
 public class SplayTreeDigitalLibrary{
 	
-	public static SplayTreeNode<Book> authorTree;
-	public static SplayTreeNode<Book> ISBNTree;
-	public static SplayTreeNode<Book> borrowTree;
-	public static File authorLeading = new File("spltreedigi_lib_auth.txt");
-	public static File isbnLeading = new File("spltreedigi_lib_isbn.txt");
-	public static File borrowLeading = new File("spltreedigi_lib_borrowed.txt");
-	private String[] mainArgs = null;//程序入参
-	private int mainArgsIndex = 0;//入参使用下标
+	public static SplayTreeNode<Book> authorTree; //the root of the author tree
+	public static SplayTreeNode<Book> ISBNTree;// the root of the ISBN tree
+	public static SplayTreeNode<Book> borrowTree; //the root of the borrowed book tree
+	public static File authorLeading = new File("spltreedigi_lib_auth.txt");//the file of the author tree
+	public static File isbnLeading = new File("spltreedigi_lib_isbn.txt");//the file of the ISBN tree
+	public static File borrowLeading = new File("spltreedigi_lib_borrowed.txt");//the file of the borrowed tree
+	private String[] mainArgs = null;
+	private int mainArgsIndex = 0;
 	private Scanner sc = null;
-	private StringBuffer output = null;//main方法输出结果
+	private StringBuffer output = null;//the return value of main method
 	
 
 	public String getNextAnswer(){
@@ -27,7 +32,6 @@ public class SplayTreeDigitalLibrary{
 			return argStr;
 		}
 	}
-
 
 	public   String main(String[] args) {
 		this.mainArgs = args;
@@ -121,7 +125,7 @@ public class SplayTreeDigitalLibrary{
 		String responseStr = "";
 		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
 		curr = SplayTreeUtils.search(authorTree,authorName,0);
-		if(curr == null) {
+		if(!curr.data.author.equals(authorName)) {
 			responseStr="Sorry, no books were found with your search term.\n";
 			System.out.print(responseStr);
 			output.append(responseStr);
@@ -162,7 +166,7 @@ public class SplayTreeDigitalLibrary{
 		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
 		String isbnStr = String.valueOf(isbn);
 		curr = SplayTreeUtils.search(ISBNTree,isbnStr,1);
-		if(curr == null) {
+		if(!(curr.data.ISBN == isbn)) {
 			responseStr="Sorry, no books were found with your search term.\n";
 			System.out.print(responseStr);
 			output.append(responseStr);
@@ -209,9 +213,10 @@ public class SplayTreeDigitalLibrary{
 	
 	public  void returnBook(String authorName) {
 		String responseStr = "";
-		SplayTreeNode<Book> curr = new SplayTreeNode<Book>();
-		curr = SplayTreeUtils.search(borrowTree,authorName,0);
-		if(curr == null) {
+		SplayTreeNode<Book> curr1 = new SplayTreeNode<Book>();
+		curr1 = SplayTreeUtils.search(borrowTree,authorName,0);
+		Book newbook = curr1.data;
+		if(!curr1.data.author.equals(authorName)) {
 			responseStr="Sorry, no books were borrowed with that author.\n";
 			System.out.print(responseStr);
 			output.append(responseStr);
@@ -220,9 +225,11 @@ public class SplayTreeDigitalLibrary{
 		responseStr="Thank you for returning this book.\n";
 		System.out.print(responseStr);
 		output.append(responseStr);
-		borrowTree = SplayTreeUtils.delete(borrowTree, curr, 0);
-		buildISBNTree(curr);
-		buildAuthorTree(curr);
+		SplayTreeNode<Book> newBookNodeForAuthorTree = new SplayTreeNode<Book>(newbook);
+		SplayTreeNode<Book> newBookNodeForISBNTree = new SplayTreeNode<Book>(newbook);
+		buildAuthorTree(newBookNodeForAuthorTree);
+		buildISBNTree(newBookNodeForISBNTree);
+		borrowTree = SplayTreeUtils.delete(borrowTree, curr1, 0);
 
 		writeTreeToFile(authorLeading, authorTree);
 		writeTreeToFile(isbnLeading, ISBNTree);
@@ -275,7 +282,7 @@ public class SplayTreeDigitalLibrary{
 	public  void readFromOrigin() {
 		Scanner fileSc = null;
 		try {
-			fileSc = new Scanner(new File("./src/pa2/SPL_DIGITAL_LIB/spltree_digi_lib_baselib.txt"));
+			fileSc = new Scanner(new File(SplayTreeDigitalLibrary.class.getResource("spltree_digi_lib_baselib.txt").toURI().getPath()));
 			while(fileSc.hasNext()) {
 				String tab = "\t";
 				String line ="";
@@ -291,7 +298,6 @@ public class SplayTreeDigitalLibrary{
 					Book newBook = new Book(title, author, ISBN);
 					SplayTreeNode<Book> newBookNodeForAuthorTree = new SplayTreeNode<Book>(newBook);
 					SplayTreeNode<Book> newBookNodeForISBNTree = new SplayTreeNode<Book>(newBook);
-					//一个节点不能同时存在于两棵树
 					buildAuthorTree(newBookNodeForAuthorTree);
 					buildISBNTree(newBookNodeForISBNTree);
 				} catch (Exception e) {
@@ -300,7 +306,7 @@ public class SplayTreeDigitalLibrary{
 				}
 			}
 
-			writeTreeToFile(authorLeading, authorTree);//加载完毕后在进行写入
+			writeTreeToFile(authorLeading, authorTree);
 			writeTreeToFile(isbnLeading, ISBNTree);
 			writeTreeToFile(borrowLeading, borrowTree);
 		} catch(Exception e) {

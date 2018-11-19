@@ -24,7 +24,6 @@ public class SplayTreeUtils {
 				return ((Book)nodeData).author.compareTo(((Book)currData).author);
 			} else if(mode == 1) {//if mode is 1, comparing by ISBN
 				return  new Long(((Book)nodeData).ISBN).compareTo(new Long(((Book)currData).ISBN));
-				//return (int)(((Book)nodeData).ISBN-((Book)currData).ISBN);
 			} else {
 				System.out.println("Unable to compare due to the incorrect mode");
 				return 0;
@@ -245,6 +244,9 @@ public class SplayTreeUtils {
 			//splay the node that is going to be deleted to be root node
 			splay(del);
 			root = del;
+			if(root.left == null && root.right == null) {
+				return null;
+			}
 			//finding the max of left subtree
 			SplayTreeNode frontNodeOfRoot = frontOfNode(root);
 			splayToRootLeft(root,frontNodeOfRoot);
@@ -257,7 +259,7 @@ public class SplayTreeUtils {
 			root.parent.left = root.parent.right = null;
 			root.parent = null;
 		}
-		return  root;
+		return root;
 	}
 
 	/**
@@ -316,11 +318,12 @@ public class SplayTreeUtils {
 	 * @param root, the root of the splay tree
 	 * @param searchitemData, the data of the splaytreenode that wants to be found out in the splay tree
 	 * @param mode, an integer equals to 0 or 1 deciding searching by author or ISBN
-	 * @return the node that is found in the splay tree
+	 * @return the node that is found in the splay tree or the last access node if the expected node cannot be found in the splay tree
 	 * The running time is O(logn)
 	 */
 	public static<T> SplayTreeNode<T> search(SplayTreeNode<T> root, T searchitemData, int mode){
 		SplayTreeNode<T> current = root;
+		SplayTreeNode<T> subcurrent = current;
 		if(current == null){
 			return null;
 		}else{
@@ -328,15 +331,18 @@ public class SplayTreeUtils {
 			while(current != null){
 				result = compare(searchitemData,current.data,mode);
 				if(result > 0){
+						subcurrent = current;
 						current = current.right;
 				}else if(result < 0){
+						subcurrent = current;
 						current = current.left;
 				}else{
 					splay(current);
 					return current;
 				}
 			}
-			return null;
+			splay(subcurrent);
+			return subcurrent;
 		}
 	}
 
