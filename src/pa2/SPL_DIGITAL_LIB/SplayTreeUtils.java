@@ -249,21 +249,19 @@ public class SplayTreeUtils {
 			}
 			//finding the max of left subtree
 			SplayTreeNode frontNodeOfRoot = frontOfNode(root);
-			if(frontNodeOfRoot==null||root.left==null){
-				root = root.left;
-				root.parent.left = root.parent.right = null;
-				root.parent = null;
-			}else {
-				splayToRootLeft(root,frontNodeOfRoot);
-				//remove currently root and splay the max of left subtree to the root
-				root.left.right = root.right;
-				if(root.right != null){
-					root.right.parent = root.left;
-				}
-				root = root.left;
-				root.parent.left = root.parent.right = null;
-				root.parent = null;
-			}
+			splayToRootLeft(root,frontNodeOfRoot);
+			//remove currently root and splay the max of left subtree to the root
+            if(root.left!=null) {
+                root.left.right = root.right;
+                if (root.right != null) {
+                    root.right.parent = root.left;
+                }
+                root = root.left;
+            }else{
+                root=root.right;
+            }
+			root.parent.left = root.parent.right = null;
+			root.parent = null;
 		}
 		return root;
 	}
