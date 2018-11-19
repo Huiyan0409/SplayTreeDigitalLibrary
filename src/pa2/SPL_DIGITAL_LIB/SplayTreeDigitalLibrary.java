@@ -285,7 +285,7 @@ public class SplayTreeDigitalLibrary{
 	public  void readFromOrigin() {
 		Scanner fileSc = null;
 		try {
-			fileSc = new Scanner(new File(SplayTreeDigitalLibrary.class.getResource("spltree_digi_lib_baselib.txt").toURI().getPath()));
+			fileSc = new Scanner(new File(SplayTreeDigitalLibrary.class.getResource("spltree_digi_lib_baselib_ok.txt").toURI().getPath()));
 			while(fileSc.hasNext()) {
 				String tab = "\t";
 				String line ="";

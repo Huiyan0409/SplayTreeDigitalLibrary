@@ -236,7 +236,7 @@ public class SplayTreeUtils {
 	 */
 	public static<T> SplayTreeNode<T> delete(SplayTreeNode<T> root, SplayTreeNode<T> node, int mode) {
 		//finding out the node that is going to be deleted
-		SplayTreeNode<T> del = node;
+        SplayTreeNode<T> del = search(root,node.data,mode);
 		if(del == null){
 			System.out.println("node not found!");
 			return null;
@@ -251,11 +251,15 @@ public class SplayTreeUtils {
 			SplayTreeNode frontNodeOfRoot = frontOfNode(root);
 			splayToRootLeft(root,frontNodeOfRoot);
 			//remove currently root and splay the max of left subtree to the root
-			root.left.right = root.right;
-			if(root.right != null){
-				root.right.parent = root.left;
-			}
-			root = root.left;
+            if(root.left!=null) {
+                root.left.right = root.right;
+                if (root.right != null) {
+                    root.right.parent = root.left;
+                }
+                root = root.left;
+            }else{
+                root=root.right;
+            }
 			root.parent.left = root.parent.right = null;
 			root.parent = null;
 		}
@@ -283,11 +287,11 @@ public class SplayTreeUtils {
 	 * The running time is O(logn)
 	 */
 	public static<T> SplayTreeNode<T> frontOfNode(SplayTreeNode<T> node){
-		if(node == null){
+		if(node == null||node.left==null){
 			return null;
 		}else{
 			SplayTreeNode<T> current = node.left;
-			while(current != null){
+			while(current.right != null){
 				current = current.right;
 			}
 			return current;
