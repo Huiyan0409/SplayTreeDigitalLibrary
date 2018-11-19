@@ -273,10 +273,11 @@ public class SplayTreeUtils {
 	 * The running time is O(logn)
 	 */
 	public static<T> void splayToRootLeft(SplayTreeNode<T> root, SplayTreeNode<T> node) {
-		if(node != null){
-			while(node.parent != root && node.parent != null){
-				if (rotateUp(node)) return;
-			}
+		if(node != null && node!=root.left){
+            root.left.parent=null;
+            splay(node);
+			root.left =  node;
+			node.parent =root;
 		}
 	}
 
