@@ -217,12 +217,12 @@ public class SplayTreeDigitalLibrary{
 			output.append(responseStr);
 			return;
 		}
-		responseStr="Thank you for returning this book.";
+		responseStr="Thank you for returning this book.\n";
 		System.out.print(responseStr);
 		output.append(responseStr);
 		borrowTree = SplayTreeUtils.delete(borrowTree, curr, 0);
-		buildISBNTree(ISBNTree);
-		buildAuthorTree(authorTree);
+		buildISBNTree(curr);
+		buildAuthorTree(curr);
 
 		writeTreeToFile(authorLeading, authorTree);
 		writeTreeToFile(isbnLeading, ISBNTree);
